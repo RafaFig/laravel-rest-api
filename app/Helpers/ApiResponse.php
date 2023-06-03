@@ -10,7 +10,7 @@ class ApiResponse
       array_merge([
         'success' => true,
         'message' => $message
-      ], $data),
+      ], $data ?? []),
       $statusCode
     );
   }

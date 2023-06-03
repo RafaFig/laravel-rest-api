@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +20,5 @@ use Illuminate\Support\Facades\Route;
 // Rota para realizar o login
 Route::post('/auth', [AuthController::class, 'login']);
 
-Route::resource('users', UserController::class)->only('store')->middleware('api.middleware');
+Route::resource('users', UserController::class)->only('store');
+Route::resource('users.expenses', ExpenseController::class)->middleware('api.middleware');

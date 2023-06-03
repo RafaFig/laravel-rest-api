@@ -45,8 +45,8 @@ class UserController extends Controller
       }
 
       return ApiResponse::error('Houve um erro ao criar o usuario', null, 500);
-    } catch (ValidationException $th) {
-      return ApiResponse::invalidParams($th->errors());
+    } catch (ValidationException $e) {
+      return ApiResponse::invalidParams($e->errors());
     }
   }
 }
