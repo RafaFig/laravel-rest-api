@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\ApiResponse;
 use App\Models\Expense;
 use App\Models\User;
+use App\Notifications\NewExpenseNotification;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Date;
@@ -58,6 +59,8 @@ class ExpenseController extends Controller
       if (!$expense->save()) {
         return ApiResponse::error('Erro ao cadastrar a despesa', null, 500);
       }
+
+      $user->notify((new NewExpenseNotification($user, $expense)));
 
       $expense->makeHidden('user');
       return response()->json($expense);
