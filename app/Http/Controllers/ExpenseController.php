@@ -63,7 +63,7 @@ class ExpenseController extends Controller
       $user->notify((new NewExpenseNotification($user, $expense)));
 
       $expense->makeHidden('user');
-      return response()->json($expense);
+      return response()->json($expense, 201);
     } catch (ValidationException $e) {
       return ApiResponse::invalidParams($e->errors());
     }
@@ -93,7 +93,7 @@ class ExpenseController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, $id)
+  public function update(Request $request, User $user, $id)
   {
     try {
       $request->validate([
