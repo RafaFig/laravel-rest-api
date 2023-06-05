@@ -20,5 +20,8 @@ use Illuminate\Support\Facades\Route;
 // Rota para realizar o login
 Route::post('/auth', [AuthController::class, 'login']);
 
+// Endpoint para o cadastro de usuário
 Route::resource('users', UserController::class)->only('store');
+
+// Recursos das despesas → associando os modelos user → expense (com autenticação)
 Route::resource('users.expenses', ExpenseController::class)->middleware('api.middleware');

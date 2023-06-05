@@ -6,7 +6,6 @@ use App\Helpers\ApiResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -33,13 +32,14 @@ class UserController extends Controller
       ]);
 
       if ($user) {
+        // Realiza a autenticação do usuário
         $token = auth('api')->login($user);
 
         return ApiResponse::success('Usuario criado com sucesso', [
           'credentials' => [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 60 // 1 hora de utilização
           ]
         ], 201);
       }

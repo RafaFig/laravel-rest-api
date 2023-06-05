@@ -17,6 +17,7 @@ class AuthController extends Controller
   {
     $credentials = $request->only(['email', 'password']);
 
+    // Realiza a autenticação do usuário
     if (!$token = auth('api')->attempt($credentials)) {
       return ApiResponse::error('Unauthorized', null, 401);
     }

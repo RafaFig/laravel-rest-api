@@ -21,6 +21,7 @@ class ExpenseController extends Controller
    */
   public function index(User $user)
   {
+    // Realiza a verificação da permissão de acesso
     if (Gate::denies('expenses.viewAny')) {
       return ApiResponse::error('Forbidden', null, 403);
     }
@@ -38,6 +39,7 @@ class ExpenseController extends Controller
    */
   public function store(Request $request, User $user)
   {
+    // Realiza a verificação da permissão de acesso
     if (Gate::denies('expenses.create')) {
       return ApiResponse::error('Forbidden', null, 403);
     }
@@ -60,8 +62,10 @@ class ExpenseController extends Controller
         return ApiResponse::error('Erro ao cadastrar a despesa', null, 500);
       }
 
+      // Adiciona o e-mail na fila para ser enviado de forma assíncrona (queue:work)
       $user->notify((new NewExpenseNotification($user, $expense)));
 
+      // Remove a chave associativa work na resposta
       $expense->makeHidden('user');
       return response()->json($expense, 201);
     } catch (ValidationException $e) {
@@ -79,6 +83,7 @@ class ExpenseController extends Controller
   {
     $expense = Expense::findOrFail($id);
 
+    // Realiza a verificação da permissão de acesso
     if (Gate::denies('expenses.view', $expense)) {
       return ApiResponse::error('Forbidden', null, 403);
     }
@@ -104,6 +109,7 @@ class ExpenseController extends Controller
 
       $expense = Expense::findOrFail($id);
 
+      // Realiza a verificação da permissão de acesso
       if (Gate::denies('expenses.update', $expense)) {
         return ApiResponse::error('Forbidden', null, 403);
       }
@@ -132,6 +138,7 @@ class ExpenseController extends Controller
   {
     $expense = Expense::findOrFail($id);
 
+    // Realiza a verificação da permissão de acesso
     if (Gate::denies('expenses.delete', $expense)) {
       return ApiResponse::error('Forbidden', null, 403);
     }
